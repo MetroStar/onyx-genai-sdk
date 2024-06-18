@@ -1,3 +1,4 @@
+requests
 spacy
 PyPDF2
 python-pptx
