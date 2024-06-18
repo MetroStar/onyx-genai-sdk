@@ -15,13 +15,13 @@ and bypass if not present
 class Embedder:
 
     def __init__(
-        self, svc_url, model, model_version, num_workers, collection_name
+        self, svc_url, model, model_version=1, num_workers=1, collection_name="default"
     ) -> None:
         self.svc_url = svc_url
         self.model = model
-        self.model_version = model_version | 1
-        self.num_workers = num_workers | 1
-        self.collection_name = collection_name | "default"
+        self.model_version = model_version
+        self.num_workers = num_workers
+        self.collection_name = collection_name
 
     def _onyx_embed(self, batch, media_type, metadata=None):
         print(f"embedding {len(batch)} items")
