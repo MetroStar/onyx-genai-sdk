@@ -15,7 +15,7 @@ and bypass if not present
 class Embedder:
 
     def __init__(
-        self, svc_url, model, model_version=1, num_workers=1, collection_name="default"
+        self, svc_url, model, model_version=1, num_workers=1, collection_name=None
     ) -> None:
         self.svc_url = svc_url
         self.model = model
