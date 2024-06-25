@@ -150,13 +150,3 @@ class Embedder:
 
         # query qdrant
         pass
-
-    def list_models(self):
-        # todo call to service
-        return [
-            {
-                "model_id": "abcdefg",
-                "model_description": "this model does images",
-                "embed_dim": 512,
-            }
-        ]
