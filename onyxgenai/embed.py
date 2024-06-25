@@ -27,7 +27,7 @@ class Embedder:
         print(f"embedding {len(batch)} items")
         print(f"metadata: {metadata}")
 
-        url = get_endpoint_url(self.svc_url, media_type)
+        url = get_endpoint_url(self.svc_url, "embedding", media_type)
         data = {
             "data": batch,
             "model_identifier": self.model,
