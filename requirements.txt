@@ -2,3 +2,4 @@ requests
 spacy
 PyPDF2
 python-pptx
+qdrant-client[fastembed]
