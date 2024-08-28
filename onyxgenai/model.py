@@ -57,7 +57,7 @@ class ModelStore:
 
         if response.status_code == 200:
             print("Prediction Successful:", response.json())
-            return response.json()["embeddings"]
+            return response.json()["embeddings"][0]
         else:
             print("Prediction Failed:", response.status_code, response.text)
             return None
