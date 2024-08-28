@@ -16,19 +16,19 @@ class ModelStore:
             print("Failed to get model info:", response.status_code, response.text)
             return None
 
-    def _onyx_model_serve(self, model, model_version, app_name):
+    def _onyx_model_serve(self, model, model_version, replicas, options):
         url = get_endpoint_url(self.svc_url, "serve/deploy", model)
         payload = {
-            "app_name": app_name,
+            "app_name": model,
             "model_version": str(model_version),
-            "num_replicas": 2,
-            "ray_actor_options": {"num_cpus": 2, "memory": 8000 * 1024 * 1024},
+            "num_replicas": replicas,
+            "ray_actor_options": options,
         }
         response = requests.post(url, json=payload)
 
         if response.status_code == 200:
             print("Deployment Successful:", response.json())
-            return app_name
+            return model
         else:
             print("Deployment Failed:", response.status_code, response.text)
             return None
@@ -62,12 +62,28 @@ class ModelStore:
             print("Prediction Failed:", response.status_code, response.text)
             return None
 
+    def _onyx_model_generate(self, app_name, prompt):
+        url = get_endpoint_url(self.svc_url, "serve/generate", "text")
+        payload = {
+            "app_name": app_name,
+            "messages": [{"role": "user", "content": prompt}],
+            "kwargs": {"max_new_tokens": 10000, "temperature": 0.4, "top_p": 0.9},
+        }
+        response = requests.post(url, json=payload)
+        if response.status_code == 200:
+            print("Generate Successful:", response.json())
+            result = response.json()["generated_text"][-1]["content"]
+            return result
+        else:
+            print("Generate Failed:", response.status_code, response.text)
+            return None
+
     def get_models(self):
         result = self._onyx_model_info()
         return result
 
-    def serve_model(self, model, model_version, app_name):
-        result = self._onyx_model_serve(model, model_version, app_name)
+    def serve_model(self, model, model_version, replicas, options):
+        result = self._onyx_model_serve(model, model_version, replicas, options)
         return result
 
     def stop_model(self, app_name):
@@ -76,4 +92,8 @@ class ModelStore:
 
     def predict_text(self, app_name, data):
         result = self._onyx_model_predict(app_name, data)
+        return result
+
+    def generate_text(self, app_name, data):
+        result = self._onyx_model_generate(app_name, data)
         return result

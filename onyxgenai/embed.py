@@ -43,6 +43,18 @@ class Embedder:
             print("Failed to get embedding:", response.status_code, response.text)
             return None
 
+    def _onyx_vector_search(self, query: str, collection_name: str):
+        payload = {
+            "query_vector": query,
+            "collection_name": collection_name,
+            "kwargs": {"limit": 3},
+        }
+
+        url = get_endpoint_url(self.svc_url, "search")
+
+        response = requests.post(url, json=payload)
+        return response.json()
+
     """
     iterable = list of items
     n = number of items to batch
@@ -132,6 +144,9 @@ class Embedder:
                     results.extend(result)
 
         return results
+
+    def vector_search(self, query, collection_name):
+        return self._onyx_vector_search(query, collection_name)
 
     def query_text(self, data, n=5):
         # TODO embed the data
