@@ -16,6 +16,15 @@ class ModelStore:
             print("Failed to get model info:", response.status_code, response.text)
             return None
 
+    def _onyx_get_deployments(self):
+        url = get_endpoint_url(self.svc_url, "serve/deployments")
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response.json()["data"]
+        else:
+            print("Failed to get deployment info:", response.status_code, response.text)
+            return None
+
     def _onyx_model_serve(self, model, model_version, replicas, options):
         url = get_endpoint_url(self.svc_url, "serve/deploy", model)
         payload = {
@@ -80,6 +89,10 @@ class ModelStore:
 
     def get_models(self):
         result = self._onyx_model_info()
+        return result
+
+    def get_deployments(self):
+        result = self._onyx_get_deployments()
         return result
 
     def serve_model(self, model, model_version, replicas, options):
