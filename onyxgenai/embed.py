@@ -4,7 +4,7 @@ from io import BytesIO
 import requests
 
 
-class Embedder:
+class EmbeddingClient:
 
     def __init__(
         self, svc_url, model_name, model_version=1, num_workers=1, collection_name=None

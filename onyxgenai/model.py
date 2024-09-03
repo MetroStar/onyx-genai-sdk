@@ -1,7 +1,7 @@
 import requests
 
 
-class ModelStore:
+class ModelClient:
     def __init__(self, svc_url) -> None:
         self.svc_url = svc_url
 
