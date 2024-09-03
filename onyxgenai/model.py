@@ -20,7 +20,7 @@ class ModelStore:
         url = get_endpoint_url(self.svc_url, "serve/deployments")
         response = requests.get(url)
         if response.status_code == 200:
-            return response.json()["data"]
+            return response.json()
         else:
             print("Failed to get deployment info:", response.status_code, response.text)
             return None
