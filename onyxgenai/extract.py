@@ -1,26 +1,30 @@
-from PyPDF2 import PdfReader
-from pptx import Presentation
 import os
-import spacy 
 import sys
 
-class PDFExtractor():
+import spacy
+from pptx import Presentation
+from PyPDF2 import PdfReader
+
+
+class PDFExtractor:
 
     def __init__(self):
         pass
-    
+
     def extract(self, file_path):
         reader = PdfReader(file_path)
         all_text = " ".join([page.extract_text() for page in reader.pages])
         all_text = all_text.replace("\n", " ")
         return all_text
 
-class VideoExtractor():
+
+class VideoExtractor:
 
     def __init__(self):
         pass
-    
-class PPTExtractor():
+
+
+class PPTExtractor:
 
     def __init__(self):
         pass
@@ -28,13 +32,14 @@ class PPTExtractor():
     def extract(self, file_path):
         text = []
         prs = Presentation(file_path)
-        
+
         for slide in prs.slides:
             for shape in slide.shapes:
                 if hasattr(shape, "text"):
                     text.append(shape.text)
-        return  " ".join(text)
-    
+        return " ".join(text)
+
+
 def get_text_extractor(filename):
     if filename.lower().endswith(".pdf"):
         return PDFExtractor()
@@ -42,31 +47,34 @@ def get_text_extractor(filename):
         return PPTExtractor()
     return None
 
+
 def extract_text_from_files(filelist):
-    text =[]
+    text = []
     for f in filelist:
         extractor = get_text_extractor(f)
-        if(extractor == None):
+        if extractor == None:
             text.append("")
         else:
-            text.append(extractor.extract(f)) 
+            text.append(extractor.extract(f))
     return text
 
 
 def extract_text_from_folder(folderpath):
     files = os.listdir(folderpath)
-    files = [os.path.join(folderpath, f) for f in files if os.path.isfile(os.path.join(folderpath, f))]
-    
+    files = [
+        os.path.join(folderpath, f)
+        for f in files
+        if os.path.isfile(os.path.join(folderpath, f))
+    ]
+
     texts = extract_text_from_files(files)
 
     return (texts, files)
 
 
-
-
 def tokenize_sentences(text):
-    sentences =[]
-    nlp = spacy.load('en_core_web_sm')
+    sentences = []
+    nlp = spacy.load("en_core_web_sm")
     if type(text) is list:
         for t in text:
             doc = nlp(t)
@@ -74,22 +82,21 @@ def tokenize_sentences(text):
     elif type(text) is str:
         doc = nlp(t)
         sentences.append([str(s) for s in doc.sents])
-    
 
     return sentences
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
 
     args = sys.argv
-    fp  = args[1]
+    fp = args[1]
 
-    text,files = extract_text_from_folder(fp)
+    text, files = extract_text_from_folder(fp)
     print(len(text), len(files))
     print(text)
     doc_sentences = tokenize_sentences(text)
     print(f"length of tokenized sentences {len(doc_sentences)}")
-    for sentences,file in zip(doc_sentences, files):
+    for sentences, file in zip(doc_sentences, files):
         print(file)
         for sentence in sentences:
-            print("* ",sentence)
-     
+            print("* ", sentence)

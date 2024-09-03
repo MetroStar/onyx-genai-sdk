@@ -1,5 +1,1 @@
-__all__=[
-    "embed",
-    "extract",
-    "generate"
-]
+__all__ = ["embed", "extract", "model"]
