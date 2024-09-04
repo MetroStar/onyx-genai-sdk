@@ -42,7 +42,7 @@ class EmbeddingClient:
             return None
 
     def _onyx_vector_search(self, query: str, collection_name: str):
-        url = f"{self.svc_url}/search"
+        url = f"{self.svc_url}/vector-store/search"
         payload = {
             "query_vector": query,
             "collection_name": collection_name,
