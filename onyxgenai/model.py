@@ -68,12 +68,16 @@ class ModelClient:
             print("Prediction Failed:", response.status_code, response.text)
             return None
 
-    def _onyx_model_generate(self, data):
+    def _onyx_model_generate(self, data, max_new_tokens, temperature, top_p):
         url = f"{self.svc_url}/serve/generate/text"
         payload = {
             "app_name": self._get_deployment_name(),
             "messages": [{"role": "user", "content": data}],
-            "kwargs": {"max_new_tokens": 10000, "temperature": 0.4, "top_p": 0.9},
+            "kwargs": {
+                "max_new_tokens": max_new_tokens,
+                "temperature": temperature,
+                "top_p": top_p,
+            },
         }
 
         response = requests.post(url, json=payload)
@@ -134,8 +138,10 @@ class ModelClient:
         result = self._onyx_model_predict(data)
         return result
 
-    def generate_completion(self, data):
-        result = self._onyx_model_generate(data)
+    def generate_completion(
+        self, data, max_new_tokens=10000, temperature=0.4, top_p=0.9
+    ):
+        result = self._onyx_model_generate(data, max_new_tokens, temperature, top_p)
         return result
 
     def deploy_model(self):
