@@ -34,7 +34,9 @@ class EmbeddingClient:
 
         response = requests.post(url, json=data)
         if response.status_code == 200:
-            return response.json()["embedding"]
+            response_value = response.json()["embeddings"]
+            print("Embedding Successful:", response_value)
+            return response_value
         else:
             print("Failed to get embedding:", response.status_code, response.text)
             return None
@@ -48,7 +50,17 @@ class EmbeddingClient:
         }
 
         response = requests.post(url, json=payload)
-        return response.json()
+        if response.status_code == 200:
+            if "results" in response.json():
+                response_value = response.json()["results"]
+                print("Search Successful:", response_value)
+                return response_value
+            else:
+                print("No search results found")
+                return None
+        else:
+            print("Failed to get search results:", response.status_code, response.text)
+            return None
 
     def batch(self, iterable, batch_size=1):
         batch_length = len(iterable)

@@ -26,18 +26,24 @@ class ModelClient:
 
     def _onyx_model_info(self):
         url = f"{self.svc_url}/info/model_info"
+
         response = requests.get(url)
         if response.status_code == 200:
-            return response.json()["data"]
+            response_value = response.json()["data"]
+            print("Model Info:", response_value)
+            return response_value
         else:
             print("Failed to get model info:", response.status_code, response.text)
             return None
 
     def _onyx_get_deployments(self):
         url = f"{self.svc_url}/serve/deployments"
+
         response = requests.get(url)
         if response.status_code == 200:
-            return response.json()
+            response_value = response.json()
+            print("Deployments:", response_value)
+            return response_value
         else:
             print("Failed to get deployment info:", response.status_code, response.text)
             return None
@@ -48,11 +54,16 @@ class ModelClient:
             "app_name": self._get_deployment_name(),
             "data": data,
         }
-        response = requests.post(url, json=payload)
 
+        response = requests.post(url, json=payload)
         if response.status_code == 200:
-            print("Prediction Successful:", response.json())
-            return response.json()["embeddings"][0]
+            if "embeddings" in response.json():
+                response_value = response.json()["embeddings"][0]
+                print("Prediction Successful:", response_value)
+                return response_value
+            else:
+                print("Prediction Failed:", response.status_code, response.text)
+                return None
         else:
             print("Prediction Failed:", response.status_code, response.text)
             return None
@@ -64,11 +75,16 @@ class ModelClient:
             "messages": [{"role": "user", "content": data}],
             "kwargs": {"max_new_tokens": 10000, "temperature": 0.4, "top_p": 0.9},
         }
+
         response = requests.post(url, json=payload)
         if response.status_code == 200:
-            print("Generate Successful:", response.json())
-            result = response.json()["generated_text"][-1]["content"]
-            return result
+            if "generated_text" in response.json():
+                response_value = response.json()["generated_text"][-1]["content"]
+                print("Generate Successful:", response_value)
+                return response_value
+            else:
+                print("Generate Failed:", response.status_code, response.text)
+                return None
         else:
             print("Generate Failed:", response.status_code, response.text)
             return None
@@ -81,11 +97,12 @@ class ModelClient:
             "num_replicas": self.replicas,
             "ray_actor_options": self.options,
         }
-        response = requests.post(url, json=payload)
 
+        response = requests.post(url, json=payload)
         if response.status_code == 200:
-            print("Deployment Successful:", response.json())
-            return self.model_name
+            response_value = response.json()
+            print("Deployment Successful:", response_value)
+            return response_value
         else:
             print("Deployment Failed:", response.status_code, response.text)
             return None
@@ -95,11 +112,12 @@ class ModelClient:
         payload = {
             "app_name": self._get_deployment_name(),
         }
-        response = requests.post(url, json=payload)
 
+        response = requests.post(url, json=payload)
         if response.status_code == 200:
-            print("Cleanup Successful:", response.json())
-            return response.json()
+            response_value = response.json()
+            print("Cleanup Successful:", response_value)
+            return response_value
         else:
             print("Cleanup Failed:", response.status_code, response.text)
             return None
