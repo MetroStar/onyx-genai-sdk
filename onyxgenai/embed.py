@@ -62,6 +62,17 @@ class EmbeddingClient:
             print("Failed to get search results:", response.status_code, response.text)
             return None
 
+    def _onyx_get_collections(self):
+        url = f"{self.svc_url}/vector-store/collections"
+        response = requests.get(url)
+        if response.status_code == 200:
+            response_value = response.json()
+            print("Collections:", response_value)
+            return response_value
+        else:
+            print("Failed to get collections:", response.status_code, response.text)
+            return None
+
     def batch(self, iterable, batch_size=1):
         batch_length = len(iterable)
         for ndx in range(0, batch_length, batch_size):
@@ -105,3 +116,6 @@ class EmbeddingClient:
 
     def vector_search(self, query, collection_name):
         return self._onyx_vector_search(query, collection_name)
+
+    def get_collections(self):
+        return self._onyx_get_collections()
