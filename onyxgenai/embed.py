@@ -7,7 +7,12 @@ import requests
 class EmbeddingClient:
 
     def __init__(
-        self, svc_url, model_name, model_version=1, num_workers=1, collection_name=None
+        self,
+        svc_url,
+        model_name=None,
+        model_version=1,
+        num_workers=1,
+        collection_name=None,
     ) -> None:
         self.svc_url = svc_url
         self.model_name = model_name
