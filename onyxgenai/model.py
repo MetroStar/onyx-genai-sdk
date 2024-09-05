@@ -182,7 +182,7 @@ class ModelClient:
         return result
 
     def deploy_model(self):
-        """Deploy the model to the service"""
+        """Deploy the model to the service."""
 
         result = self._onyx_model_serve()
         return result
