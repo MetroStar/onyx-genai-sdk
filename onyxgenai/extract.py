@@ -77,7 +77,7 @@ def extract_text_from_files(filelist):
     text = []
     for f in filelist:
         extractor = get_text_extractor(f)
-        if extractor == None:
+        if extractor is None:
             text.append("")
         else:
             text.append(extractor.extract(f))
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     print(text)
     doc_sentences = tokenize_sentences(text)
     print(f"length of tokenized sentences {len(doc_sentences)}")
-    for sentences, file in zip(doc_sentences, files):
+    for sentences, file in zip(doc_sentences, files, strict=False):
         print(file)
         for sentence in sentences:
             print("* ", sentence)

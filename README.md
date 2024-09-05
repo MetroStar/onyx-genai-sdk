@@ -7,6 +7,8 @@ The goal of this project is to simplify the developer experience when interactin
 1. [Using the SDK in Onyx](#using-the-sdk-in-onyx)
 2. [Embedding Client](#embedding-client)
 3. [Model Client](#model-client)
+4. [Running Unit Tests](#running-unit-tests)
+5. [Running Code Quality Checks](#running-code-quality-checks)
 
 ## Using the SDK in Onyx
 
@@ -35,3 +37,19 @@ The Model Client provides access to the Onyx GenAI Model Store Service. The clie
 - Deploying and Deleting Model Deployments
 - Performing Text and Image Prediction and Embedding
 - Generating Text Completions from an LLM
+
+## Running Unit Tests
+
+1. To run unit tests, run the following:
+
+```sh
+pytest
+```
+
+## Running Code Quality Checks
+
+1. To run code quality checks, run the following:
+
+```sh
+ruff check .
+```
