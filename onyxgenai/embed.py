@@ -87,6 +87,17 @@ class EmbeddingClient:
             print("Failed to get collections:", response.status_code, response.text)
             return None
 
+    def _onyx_delete_collection(self, collection_name):
+        url = f"{self.svc_url}/vector-store/collections/{collection_name}"
+        response = requests.delete(url)
+        if response.status_code == 200:
+            response_value = response.json()
+            print("Collection deleted:", response_value)
+            return response_value
+        else:
+            print("Failed to delete collection:", response.status_code, response.text)
+            return None
+
     def batch(self, iterable, batch_size=1):
         """
         Batch an iterable into chunks of size batch_size
@@ -175,3 +186,13 @@ class EmbeddingClient:
             list: The list of collections
         """
         return self._onyx_get_collections()
+
+    def delete_collection(self, collection_name):
+        """
+        Delete a collection
+        Args:
+            collection_name (str): The name of the collection
+        Returns:
+            dict: The response from the server
+        """
+        return self._onyx_delete_collection(collection_name)
