@@ -5,6 +5,15 @@ import requests
 
 
 class EmbeddingClient:
+    """
+    A client for interacting with the Onyx Embedding Service.
+    Args:
+        svc_url (str): The URL of the Onyx Embedding Service
+        model_name (str): The name of the model to deploy
+        model_version (int): The version of the model to deploy
+        num_workers (int): The number of workers to deploy
+        collection_name (str): The name of the collection
+    """
 
     def __init__(
         self,
@@ -79,11 +88,30 @@ class EmbeddingClient:
             return None
 
     def batch(self, iterable, batch_size=1):
+        """
+        Batch an iterable into chunks of size batch_size
+        Args:
+            iterable (iterable): The iterable to batch
+            batch_size (int): The size of the batches
+        Returns:
+            generator: A generator that yields batches of the iterable
+        """
+
         batch_length = len(iterable)
         for ndx in range(0, batch_length, batch_size):
             yield iterable[ndx : min(ndx + batch_size, batch_length)]
 
     def embed_text(self, data: list, batch_size=None, return_results=True):
+        """
+        Get the embeddings for the input text
+        Args:
+            data (list): The input text
+            batch_size (int): The size of the batches
+            return_results (bool): Whether to return the results
+        Returns:
+            list: The embeddings for the input text
+        """
+
         if batch_size is None:
             batch_size = len(data)
 
@@ -96,6 +124,16 @@ class EmbeddingClient:
         return results
 
     def embed_images(self, data: list, batch_size=None, return_results=True):
+        """
+        Get the embeddings for the input images
+        Args:
+            data (list): The input images
+            batch_size (int): The size of the batches
+            return_results (bool): Whether to return the results
+        Returns:
+            list: The embeddings for the input images
+        """
+
         if batch_size is None:
             batch_size = len(data)
 
@@ -120,7 +158,20 @@ class EmbeddingClient:
         return results
 
     def vector_search(self, query, collection_name):
+        """
+        Search for vectors in the collection
+        Args:
+            query (str): The query vector
+            collection_name (str): The name of the collection
+        Returns:
+            list: The vector search results
+        """
         return self._onyx_vector_search(query, collection_name)
 
     def get_collections(self):
+        """
+        Get the list of collections available in the service
+        Returns:
+            list: The list of collections
+        """
         return self._onyx_get_collections()

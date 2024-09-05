@@ -7,6 +7,9 @@ from PyPDF2 import PdfReader
 
 
 class PDFExtractor:
+    """
+    PDFExtractor class to extract text from PDF files
+    """
 
     def __init__(self):
         pass
@@ -19,12 +22,18 @@ class PDFExtractor:
 
 
 class VideoExtractor:
+    """
+    VideoExtractor class to extract text from video files
+    """
 
     def __init__(self):
         pass
 
 
 class PPTExtractor:
+    """
+    PPTExtractor class to extract text from PowerPoint files
+    """
 
     def __init__(self):
         pass
@@ -41,6 +50,14 @@ class PPTExtractor:
 
 
 def get_text_extractor(filename):
+    """
+    Get the appropriate text extractor based on the file extension
+    Args:
+        filename: str: name of the file
+    Returns:
+        extractor: object: text extractor object
+    """
+
     if filename.lower().endswith(".pdf"):
         return PDFExtractor()
     elif filename.lower().endswith(".pptx"):
@@ -49,6 +66,14 @@ def get_text_extractor(filename):
 
 
 def extract_text_from_files(filelist):
+    """
+    Extract text from a list of files
+    Args:
+        filelist: list: list of file paths
+    Returns:
+        text: list: list of extracted text
+    """
+
     text = []
     for f in filelist:
         extractor = get_text_extractor(f)
@@ -60,6 +85,15 @@ def extract_text_from_files(filelist):
 
 
 def extract_text_from_folder(folderpath):
+    """
+    Extract text from all files in a folder
+    Args:
+        folderpath: str: path to the folder
+    Returns:
+        text: list: list of extracted text
+        files: list: list of file paths
+    """
+
     files = os.listdir(folderpath)
     files = [
         os.path.join(folderpath, f)
@@ -73,6 +107,14 @@ def extract_text_from_folder(folderpath):
 
 
 def tokenize_sentences(text):
+    """
+    Tokenize text into sentences
+    Args:
+        text: str or list: text to tokenize
+    Returns:
+        sentences: list: list of tokenized sentences
+    """
+
     sentences = []
     nlp = spacy.load("en_core_web_sm")
     if type(text) is list:

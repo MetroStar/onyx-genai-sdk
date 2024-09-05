@@ -2,6 +2,16 @@ import requests
 
 
 class ModelClient:
+    """Client for interacting with the Onyx Model Store Service
+    Args:
+        svc_url (str): The URL of the Onyx Model Store Service
+        model_name (str): The name of the model to deploy
+        model_version (int): The version of the model to deploy
+        replicas (int): The number of replicas to deploy
+        deployment_name (str): The name of the deployment
+        options (dict): The options for deploying the model
+    """
+
     def __init__(
         self,
         svc_url,
@@ -127,27 +137,58 @@ class ModelClient:
             return None
 
     def get_models(self):
+        """Get the list of models available in the service
+        Returns:
+            list: The list of models
+        """
+
         result = self._onyx_model_info()
         return result
 
     def get_deployments(self):
+        """Get the list of deployments available in the service
+        Returns:
+            list: The list of deployments
+        """
+
         result = self._onyx_get_deployments()
         return result
 
     def embed_text(self, data):
+        """Get the embeddings for the input text
+        Args:
+            data (str): The input text
+        Returns:
+            list: The embeddings for the input text
+        """
+
         result = self._onyx_model_predict(data)
         return result
 
     def generate_completion(
-        self, data, max_new_tokens=10000, temperature=0.4, top_p=0.9
+        self, prompt, max_new_tokens=10000, temperature=0.4, top_p=0.9
     ):
-        result = self._onyx_model_generate(data, max_new_tokens, temperature, top_p)
+        """Generate completion for the prompt
+        Args:
+            prompt (str): The prompt for completion
+            max_new_tokens (int): The maximum number of tokens to generate
+            temperature (float): The temperature for sampling
+            top_p (float): The top_p value for sampling
+        Returns:
+            str: The generated completion text
+        """
+
+        result = self._onyx_model_generate(prompt, max_new_tokens, temperature, top_p)
         return result
 
     def deploy_model(self):
+        """Deploy the model to the service"""
+
         result = self._onyx_model_serve()
         return result
 
     def delete_deployment(self):
+        """Delete the deployment from the service"""
+
         result = self._onyx_model_cleanup()
         return result
