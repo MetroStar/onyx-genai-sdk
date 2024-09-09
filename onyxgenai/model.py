@@ -38,6 +38,10 @@ class ModelClient:
             return None
 
     def _onyx_model_predict(self, data, model_name):
+        # Endpoint expects a list of strings
+        if isinstance(data, str):
+            data = [data]
+
         url = f"{self.svc_url}/serve/predict/text"
         payload = {
             "app_name": model_name,
