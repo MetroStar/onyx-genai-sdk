@@ -78,11 +78,16 @@ class ModelClient:
             print("Prediction Failed:", response.status_code, response.text)
             return None
 
-    def _onyx_model_generate(self, data, max_new_tokens, temperature, top_p):
+    def _onyx_model_generate(
+        self, prompt, system_prompt, max_new_tokens, temperature, top_p
+    ):
         url = f"{self.svc_url}/serve/generate/text"
         payload = {
             "app_name": self._get_deployment_name(),
-            "messages": [{"role": "user", "content": data}],
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt},
+            ],
             "kwargs": {
                 "max_new_tokens": max_new_tokens,
                 "temperature": temperature,
@@ -166,11 +171,17 @@ class ModelClient:
         return result
 
     def generate_completion(
-        self, prompt, max_new_tokens=10000, temperature=0.4, top_p=0.9
+        self,
+        prompt="""""",
+        system_prompt=None,
+        max_new_tokens=10000,
+        temperature=0.4,
+        top_p=0.9,
     ):
         """Generate completion for the prompt
         Args:
             prompt (str): The prompt for completion
+            system_prompt (str): The system prompt for completion
             max_new_tokens (int): The maximum number of tokens to generate
             temperature (float): The temperature for sampling
             top_p (float): The top_p value for sampling
@@ -178,7 +189,9 @@ class ModelClient:
             str: The generated completion text
         """
 
-        result = self._onyx_model_generate(prompt, max_new_tokens, temperature, top_p)
+        result = self._onyx_model_generate(
+            prompt, system_prompt, max_new_tokens, temperature, top_p
+        )
         return result
 
     def deploy_model(self):
