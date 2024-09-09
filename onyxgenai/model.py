@@ -172,8 +172,8 @@ class ModelClient:
 
     def generate_completion(
         self,
-        prompt="""""",
-        system_prompt=None,
+        prompt,
+        system_prompt="""""",
         max_new_tokens=10000,
         temperature=0.4,
         top_p=0.9,
