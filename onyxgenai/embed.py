@@ -9,27 +9,17 @@ class EmbeddingClient:
     A client for interacting with the Onyx Embedding Service.
     Args:
         svc_url (str): The URL of the Onyx Embedding Service
-        model_name (str): The name of the model to deploy
-        model_version (int): The version of the model to deploy
-        num_workers (int): The number of workers to deploy
-        collection_name (str): The name of the collection
     """
 
     def __init__(
         self,
         svc_url,
-        model_name=None,
-        model_version=1,
-        num_workers=1,
-        collection_name=None,
     ) -> None:
         self.svc_url = svc_url
-        self.model_name = model_name
-        self.model_version = model_version
-        self.num_workers = num_workers
-        self.collection_name = collection_name
 
-    def _onyx_embed(self, batch, media_type):
+    def _onyx_embed(
+        self, batch, media_type, model_name, model_version, num_workers, collection_name
+    ):
         if media_type == "text":
             url = f"{self.svc_url}/embedding/text"
         elif media_type == "image":
@@ -40,10 +30,10 @@ class EmbeddingClient:
 
         data = {
             "data": batch,
-            "model_identifier": self.model_name,
-            "model_version": self.model_version,
-            "num_workers": self.num_workers,
-            "collection_name": self.collection_name,
+            "model_identifier": model_name,
+            "model_version": model_version,
+            "num_workers": num_workers,
+            "collection_name": collection_name,
         }
 
         response = requests.post(url, json=data)
@@ -112,11 +102,24 @@ class EmbeddingClient:
         for ndx in range(0, batch_length, batch_size):
             yield iterable[ndx : min(ndx + batch_size, batch_length)]
 
-    def embed_text(self, data: list, batch_size=None, return_results=True):
+    def embed_text(
+        self,
+        data: list,
+        model_name,
+        model_version=1,
+        num_workers=1,
+        collection_name=None,
+        batch_size=None,
+        return_results=True,
+    ):
         """
         Get the embeddings for the input text
         Args:
             data (list): The input text
+            model_name (str): The name of the model
+            model_version (int): The version of the model
+            num_workers (int): The number of workers
+            collection_name (str): The name of the collection
             batch_size (int): The size of the batches
             return_results (bool): Whether to return the results
         Returns:
@@ -128,13 +131,24 @@ class EmbeddingClient:
 
         results = []
         for b in self.batch(data, batch_size):
-            result = self._onyx_embed(b, "text")
+            result = self._onyx_embed(
+                b, "text", model_name, model_version, num_workers, collection_name
+            )
             if return_results:
                 results.extend(result)
 
         return results
 
-    def embed_images(self, data: list, batch_size=None, return_results=True):
+    def embed_images(
+        self,
+        data: list,
+        model_name,
+        model_version=1,
+        num_workers=1,
+        collection_name=None,
+        batch_size=None,
+        return_results=True,
+    ):
         """
         Get the embeddings for the input images
         Args:
@@ -162,7 +176,9 @@ class EmbeddingClient:
 
         results = []
         for b in self.batch(encoded, batch_size):
-            result = self._onyx_embed(b, "image")
+            result = self._onyx_embed(
+                b, "image", model_name, model_version, num_workers, collection_name
+            )
             if return_results:
                 results.extend(result)
 

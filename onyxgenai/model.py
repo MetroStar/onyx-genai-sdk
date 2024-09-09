@@ -5,34 +5,13 @@ class ModelClient:
     """Client for interacting with the Onyx Model Store Service
     Args:
         svc_url (str): The URL of the Onyx Model Store Service
-        model_name (str): The name of the model to deploy
-        model_version (int): The version of the model to deploy
-        replicas (int): The number of replicas to deploy
-        deployment_name (str): The name of the deployment
-        options (dict): The options for deploying the model
     """
 
     def __init__(
         self,
         svc_url,
-        model_name=None,
-        model_version=1,
-        replicas=1,
-        deployment_name=None,
-        options=None,
     ) -> None:
         self.svc_url = svc_url
-        self.model_name = model_name
-        self.model_version = model_version
-        self.replicas = replicas
-        self.deployment_name = deployment_name
-        self.options = options
-
-    def _get_deployment_name(self):
-        if self.deployment_name:
-            return self.deployment_name
-        else:
-            return self.model_name
 
     def _onyx_model_info(self):
         url = f"{self.svc_url}/info/model_info"
@@ -58,10 +37,10 @@ class ModelClient:
             print("Failed to get deployment info:", response.status_code, response.text)
             return None
 
-    def _onyx_model_predict(self, data):
+    def _onyx_model_predict(self, data, model_name):
         url = f"{self.svc_url}/serve/predict/text"
         payload = {
-            "app_name": self._get_deployment_name(),
+            "app_name": model_name,
             "data": data,
         }
 
@@ -79,11 +58,11 @@ class ModelClient:
             return None
 
     def _onyx_model_generate(
-        self, prompt, system_prompt, max_new_tokens, temperature, top_p
+        self, prompt, system_prompt, model_name, max_new_tokens, temperature, top_p
     ):
         url = f"{self.svc_url}/serve/generate/text"
         payload = {
-            "app_name": self._get_deployment_name(),
+            "app_name": model_name,
             "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": prompt},
@@ -108,13 +87,13 @@ class ModelClient:
             print("Generate Failed:", response.status_code, response.text)
             return None
 
-    def _onyx_model_serve(self):
-        url = f"{self.svc_url}/serve/deploy/{self.model_name}"
+    def _onyx_model_serve(self, model_name, model_version, replicas, options):
+        url = f"{self.svc_url}/serve/deploy/{model_name}"
         payload = {
-            "app_name": self._get_deployment_name(),
-            "model_version": str(self.model_version),
-            "num_replicas": self.replicas,
-            "ray_actor_options": self.options,
+            "app_name": model_name,
+            "model_version": str(model_version),
+            "num_replicas": replicas,
+            "ray_actor_options": options,
         }
 
         response = requests.post(url, json=payload)
@@ -126,10 +105,10 @@ class ModelClient:
             print("Deployment Failed:", response.status_code, response.text)
             return None
 
-    def _onyx_model_cleanup(self):
+    def _onyx_model_cleanup(self, deployment_name):
         url = f"{self.svc_url}/serve/cleanup"
         payload = {
-            "app_name": self._get_deployment_name(),
+            "app_name": deployment_name,
         }
 
         response = requests.post(url, json=payload)
@@ -159,21 +138,23 @@ class ModelClient:
         result = self._onyx_get_deployments()
         return result
 
-    def embed_text(self, data):
+    def embed_text(self, data, model_name):
         """Get the embeddings for the input text
         Args:
             data (str): The input text
+            model_name (str): The name of the model
         Returns:
             list: The embeddings for the input text
         """
 
-        result = self._onyx_model_predict(data)
+        result = self._onyx_model_predict(data, model_name)
         return result
 
     def generate_completion(
         self,
         prompt,
         system_prompt="",
+        model_name=None,
         max_new_tokens=10000,
         temperature=0.4,
         top_p=0.9,
@@ -182,6 +163,7 @@ class ModelClient:
         Args:
             prompt (str): The prompt for completion
             system_prompt (str): The system prompt for completion
+            model_name (str): The name of the model
             max_new_tokens (int): The maximum number of tokens to generate
             temperature (float): The temperature for sampling
             top_p (float): The top_p value for sampling
@@ -190,18 +172,18 @@ class ModelClient:
         """
 
         result = self._onyx_model_generate(
-            prompt, system_prompt, max_new_tokens, temperature, top_p
+            prompt, system_prompt, model_name, max_new_tokens, temperature, top_p
         )
         return result
 
-    def deploy_model(self):
+    def deploy_model(self, model_name, model_version=1, replicas=1, options=None):
         """Deploy the model to the service"""
 
-        result = self._onyx_model_serve()
+        result = self._onyx_model_serve(model_name, model_version, replicas, options)
         return result
 
-    def delete_deployment(self):
+    def delete_deployment(self, deployment_name):
         """Delete the deployment from the service"""
 
-        result = self._onyx_model_cleanup()
+        result = self._onyx_model_cleanup(deployment_name)
         return result
