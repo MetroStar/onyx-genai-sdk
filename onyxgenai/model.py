@@ -91,6 +91,33 @@ class ModelClient:
             print("Generate Failed:", response.status_code, response.text)
             return None
 
+    def _onyx_model_generate_text(
+        self, messages, model_name, max_new_tokens, temperature, top_p
+    ):
+        url = f"{self.svc_url}/serve/generate/text"
+        payload = {
+            "app_name": model_name,
+            "messages": messages,
+            "kwargs": {
+                "max_new_tokens": max_new_tokens,
+                "temperature": temperature,
+                "top_p": top_p,
+            },
+        }
+
+        response = requests.post(url, json=payload)
+        if response.status_code == 200:
+            if "generated_text" in response.json():
+                response_value = response.json()["generated_text"]
+                print("Generate Successful:", response_value)
+                return response_value
+            else:
+                print("Generate Failed:", response.status_code, response.text)
+                return None
+        else:
+            print("Generate Failed:", response.status_code, response.text)
+            return None
+
     def _onyx_model_serve(self, model_name, model_version, replicas, options):
         url = f"{self.svc_url}/serve/deploy/{model_name}"
         payload = {
@@ -177,6 +204,30 @@ class ModelClient:
 
         result = self._onyx_model_generate(
             prompt, system_prompt, model_name, max_new_tokens, temperature, top_p
+        )
+        return result
+
+    def generate_text(
+        self,
+        messages,
+        model_name=None,
+        max_new_tokens=10000,
+        temperature=0.4,
+        top_p=0.9,
+    ):
+        """Generate text based on the input messages
+        Args:
+            messages (list): The list of messages for the model
+            model_name (str): The name of the model
+            max_new_tokens (int): The maximum number of tokens to generate
+            temperature (float): The temperature for sampling
+            top_p (float): The top_p value for sampling
+        Returns:
+            str: The generated completion text
+        """
+
+        result = self._onyx_model_generate_text(
+            messages, model_name, max_new_tokens, temperature, top_p
         )
         return result
 
