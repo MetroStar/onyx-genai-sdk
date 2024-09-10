@@ -31,8 +31,26 @@ class ModelClient:
         response = requests.get(url)
         if response.status_code == 200:
             response_value = response.json()
-            print("Deployments:", response_value)
-            return response_value
+            deployment_list = []
+            for model, details in response_value.items():
+                flattened_deployment = {
+                    "model": model,
+                    "status": details["status"],
+                    "message": details["message"],
+                    "last_deployed_time_s": details["last_deployed_time_s"],
+                    "deployment_status": details["deployments"][model]["status"],
+                    "deployment_status_trigger": details["deployments"][model][
+                        "status_trigger"
+                    ],
+                    "replica_states": details["deployments"][model]["replica_states"][
+                        "RUNNING"
+                    ],
+                    "deployment_message": details["deployments"][model]["message"],
+                }
+                deployment_list.append(flattened_deployment)
+
+            print("Deployments:", deployment_list)
+            return deployment_list
         else:
             print("Failed to get deployment info:", response.status_code, response.text)
             return None
