@@ -18,6 +18,8 @@ The goal of this project is to simplify the developer experience when interactin
 
 4. Add the onyxgenai client imports to your project
 
+For more in depth examples, see [notebooks](https://github.com/MetroStar/onyx-genai-sdk/tree/main/notebooks) section of this repo.
+
 ### Embedding Client
 
 The Embedding Client provides access to the Onyx GenAI Embedding Service. The client provides access to functionality such as:
