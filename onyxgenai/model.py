@@ -18,7 +18,7 @@ class ModelClient:
 
         response = requests.get(url)
         if response.status_code == 200:
-            response_value = response.json()["data"]
+            response_value = response.json()["data"]["models"]
             print("Model Info:", response_value)
             return response_value
         else:
