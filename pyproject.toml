@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "onyxgenai"
-version = "1.0.1"
+version = "1.0.2"
 description = "Python SDK for interacting with Onyx Generative AI Services"
 readme = "README.md"
 license = { file = "LICENSE" }
