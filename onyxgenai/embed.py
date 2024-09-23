@@ -170,7 +170,6 @@ class EmbeddingClient:
                     encoded.append(encoded_image)
             else:  # assume that it is a PIL image
                 buffered = BytesIO()
-                d.save(buffered, format="JPEG")
                 encoded_image = base64.b64encode(buffered.getvalue())
                 encoded.append(encoded_image)
 
