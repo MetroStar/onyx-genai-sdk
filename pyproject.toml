@@ -1,3 +1,30 @@
+[build-system]
+requires      = ["setuptools>=75.1.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "onyxgenai"
+version = "1.0.1"
+description = "Python SDK for interacting with Onyx Generative AI Services"
+readme = "README.md"
+license = { file = "LICENSE" }
+dependencies = [
+    "requests",
+    "spacy",
+    "PyPDF2",
+    "python-pptx",
+]
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[project.urls]
+Homepage = "https://github.com/MetroStar/onyx-genai-sdk"
+
+[tool.setuptools]
+py-modules = ['onyxgenai']
+
 [tool.ruff]
 select = ["B", "C4", "EXE", "F", "E", "ISC", "ICN", "INP", "PIE", "SIM", "W", "T20", "UP", "T10", "G", "C90", "ERA"]
 ignore = ["B008", "SIM102", "T201"]

@@ -1,12 +1,21 @@
-# Welcome to the Onyx GenAI SDK
+# Onyx GenAI SDK
 
 The goal of this project is to simplify the developer experience when interacting with Onyx GenAI Services. This project provides wrappers around the the underlying APIs provided by the service.
 
 ## Table of Contents
 
-1. [Using the SDK in Onyx](#using-the-sdk-in-onyx)
-2. [Running Unit Tests](#running-unit-tests)
-3. [Running Code Quality Checks](#running-code-quality-checks)
+1. [Installation](#installation)
+2. [Using the SDK in Onyx](#using-the-sdk-in-onyx)
+3. [Running Unit Tests](#running-unit-tests)
+4. [Running Code Quality Checks](#running-code-quality-checks)
+
+## Installation
+
+To install with `pip`, run:
+
+```bash
+pip install onyxgenai
+```
 
 ## Using the SDK in Onyx
 
@@ -16,7 +25,9 @@ The goal of this project is to simplify the developer experience when interactin
 
 3. Create a new Jupyter Notebook
 
-4. Add the onyxgenai client imports to your project
+4. Install the client as indicated above
+
+5. Add the onyxgenai client imports to your project
 
 For more in depth examples, see [notebooks](https://github.com/MetroStar/onyx-genai-sdk/tree/main/notebooks) section of this repo.
 
