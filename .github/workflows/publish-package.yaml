@@ -24,4 +24,5 @@ jobs:
           PYPI_USERNAME: __token__
           PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
+          python -m build
           twine upload -u $PYPI_USERNAME -p $PYPI_PASSWORD dist/*
