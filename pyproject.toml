@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "onyxgenai"
-version = "1.0.2"
+version = "1.0.3"
 description = "Python SDK for interacting with Onyx Generative AI Services"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -23,7 +23,8 @@ dev = ["pytest", "ruff"]
 Homepage = "https://github.com/MetroStar/onyx-genai-sdk"
 
 [tool.setuptools]
-py-modules = ['onyxgenai']
+packages.find.include = ["onyxgenai"]
+packages.find.exclude = ["tests"]
 
 [tool.ruff]
 select = ["B", "C4", "EXE", "F", "E", "ISC", "ICN", "INP", "PIE", "SIM", "W", "T20", "UP", "T10", "G", "C90", "ERA"]
