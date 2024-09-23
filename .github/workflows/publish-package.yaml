@@ -1,0 +1,26 @@
+name: "Publish Package"
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Infrastructure"
+        uses: actions/checkout@main
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10
+
+      - name: Install Dependencies
+        run: |
+          pip install build twine
+      - name: Build and Distribute
+        env:
+          PYPI_USERNAME: __token__
+          PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: |
+          twine upload -u $PYPI_USERNAME -p $PYPI_PASSWORD dist/*
