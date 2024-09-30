@@ -17,6 +17,12 @@ To install with `pip`, run:
 pip install onyxgenai
 ```
 
+To install with `conda`, run:
+
+```bash
+conda install -c conda-forge onyxgenai
+```
+
 ## Using the SDK in Onyx
 
 1. Create a Conda Store Environment with all dependencies listed in the requirements.txt
@@ -25,7 +31,7 @@ pip install onyxgenai
 
 3. Create a new Jupyter Notebook
 
-4. Install the client as indicated above
+4. Install the SDK as indicated above
 
 5. Add the onyxgenai client imports to your project
 
