@@ -55,6 +55,21 @@ The Model Client provides access to the Onyx GenAI Model Store Service. The clie
 - Performing Text and Image Prediction and Embedding
 - Generating Text Completions from an LLM
 
+## Running the Project Locally
+
+1. To create an environment, run the following:
+
+```sh
+virtualenv -p python3 venv
+source venv/bin/activate
+```
+
+2. To install dependencies, run the following:
+
+```sh
+pip install .
+```
+
 ## Running Unit Tests
 
 1. To run unit tests, run the following:

@@ -1,6 +1,0 @@
-requests
-spacy
-PyPDF2
-python-pptx
-pytest
-ruff
