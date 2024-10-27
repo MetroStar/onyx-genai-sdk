@@ -6,8 +6,9 @@ The goal of this project is to simplify the developer experience when interactin
 
 1. [Installation](#installation)
 2. [Using the SDK in Onyx](#using-the-sdk-in-onyx)
-3. [Running Unit Tests](#running-unit-tests)
-4. [Running Code Quality Checks](#running-code-quality-checks)
+3. [Running the Project Locally](#running-the-project-locally)
+4. [Running Unit Tests](#running-unit-tests)
+5. [Running Code Quality Checks](#running-code-quality-checks)
 
 ## Installation
 
