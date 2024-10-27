@@ -68,6 +68,7 @@ source venv/bin/activate
 
 ```sh
 pip install .
+pip install -e ".[dev]" # Optional
 ```
 
 ## Running Unit Tests
