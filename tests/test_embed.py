@@ -66,7 +66,7 @@ def test_onyx_vector_search_with_limit(mock_post):
     query = "sample query"
     collection_name = "test_collection"
     limit = 10
-    result = client.vector_search(query, collection_name, 10)
+    result = client.vector_search(query, collection_name, limit)
 
     assert result == mock_response["results"]
 
