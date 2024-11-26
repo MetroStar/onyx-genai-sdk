@@ -45,12 +45,12 @@ class EmbeddingClient:
             print("Failed to get embedding:", response.status_code, response.text)
             return None
 
-    def _onyx_vector_search(self, query: str, collection_name: str):
+    def _onyx_vector_search(self, query: str, collection_name: str, limit: int):
         url = f"{self.svc_url}/vector-store/search"
         payload = {
             "query_vector": query,
             "collection_name": collection_name,
-            "kwargs": {"limit": 3},
+            "kwargs": {"limit": limit},
         }
 
         response = requests.post(url, json=payload)
@@ -183,16 +183,17 @@ class EmbeddingClient:
 
         return results
 
-    def vector_search(self, query, collection_name):
+    def vector_search(self, query, collection_name, limit=3):
         """
         Search for vectors in the collection
         Args:
             query (str): The query vector
             collection_name (str): The name of the collection
+            limit (int): The number of results to return (default 3)
         Returns:
             list: The vector search results
         """
-        return self._onyx_vector_search(query, collection_name)
+        return self._onyx_vector_search(query, collection_name, limit)
 
     def get_collections(self):
         """
