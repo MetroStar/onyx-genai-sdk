@@ -129,7 +129,6 @@ def tokenize_sentences(text):
 
 
 if __name__ == "__main__":
-
     args = sys.argv
     fp = args[1]
 
