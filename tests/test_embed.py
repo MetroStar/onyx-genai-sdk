@@ -56,7 +56,7 @@ def test_onyx_vector_search(mock_post):
 
 
 @patch("requests.post")
-def test_onyx_vector_search_with_limit(mock_post):
+def test_onyx_vector_search_with_kwargs(mock_post):
     svc_url = "http://localhost:8000"
     client = EmbeddingClient(svc_url)
     mock_response = {"results": ["result1", "result2", "result3"]}
@@ -66,7 +66,8 @@ def test_onyx_vector_search_with_limit(mock_post):
     query = "sample query"
     collection_name = "test_collection"
     limit = 10
-    result = client.vector_search(query, collection_name, limit)
+    query_filter = {"field": "value"}
+    result = client.vector_search(query, collection_name, limit, query_filter)
 
     assert result == mock_response["results"]
 
